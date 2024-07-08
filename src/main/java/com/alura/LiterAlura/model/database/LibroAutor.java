@@ -5,12 +5,14 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "subjects")
-public class SubjectDB {
+public class LibroAutor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String subject;
     @ManyToOne
-    private BookDB book;
+    @JoinColumn(name = "libro_id")
+    private BookDB bookDB;
+    @ManyToOne
+    @JoinColumn(name = "autor_id")
+    private AuthorDB authorDB;
 }
