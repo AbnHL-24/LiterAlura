@@ -10,6 +10,7 @@ public class ConsumoAPI {
     private static ConsumoAPI instance;
 
     private ConsumoAPI() {}
+
     public static ConsumoAPI getInstance() {
         if (instance == null) {
             instance = new ConsumoAPI();
@@ -17,12 +18,14 @@ public class ConsumoAPI {
         return instance;
     }
 
-    public String obtenerDatos(String url) {
-        HttpClient client = HttpClient.newHttpClient();
+    private String obtenerDatos(String url) {
+        HttpClient client = HttpClient.newHttpClient().newBuilder()
+                .followRedirects(HttpClient.Redirect.NORMAL)
+                .build();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .build();
-        HttpResponse<String> response;
+        HttpResponse<String> response = null;
         try {
             response = client
                     .send(request, HttpResponse.BodyHandlers.ofString());
@@ -30,11 +33,13 @@ public class ConsumoAPI {
             throw new RuntimeException(e);
         }
 
-        return response.body();
+        String json = response.body();
+        //System.out.println(json);
+        return json;
     }
 
     public String obtenerLibros(String libro) {
-        String urlBaseLibros = "gutendex.com/books?search=";
+        String urlBaseLibros = "https://gutendex.com/books?search=";
         return obtenerDatos(urlBaseLibros + libro.replace(" ", "%20"));
     }
 }

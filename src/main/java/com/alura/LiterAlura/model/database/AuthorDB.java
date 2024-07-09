@@ -17,7 +17,7 @@ public class AuthorDB{
     private Integer deathYear;
     @Column(unique = true, nullable = false)
     private String name;
-    @OneToMany(mappedBy = "autorDB", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "authorDB", cascade = CascadeType.ALL)
     private List<LibroAutor> libroAutores;
 
     public AuthorDB() {}
