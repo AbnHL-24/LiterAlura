@@ -1,5 +1,6 @@
 package com.alura.LiterAlura.view;
 
+import com.alura.LiterAlura.model.api.BookAPI;
 import com.alura.LiterAlura.model.api.ListOfBooksAPI;
 import com.alura.LiterAlura.model.database.AuthorDB;
 import com.alura.LiterAlura.model.database.BookDB;
@@ -80,7 +81,8 @@ public class ConsoleMenu {
                     LibroAutorDB libroAutorDB = new LibroAutorDB(bookDB, authorDB);
                     var laDB = libroAutorRepository.save(libroAutorDB);
                 });
-
+        imprimirLibroGuardado(listOfBooksAPI.results().getFirst());
+        System.out.println();
         // Se suspende lo de abajo porque ni yo sé qué hice.
         /*s.getLibroAutor().stream()
                 .forEach(a -> {
@@ -97,5 +99,14 @@ public class ConsoleMenu {
                 System.out.print("Entrada no válida. Por favor ingrese un número: ");
             }
         }
+    }
+
+    private void imprimirLibroGuardado(BookAPI bookAPI) {
+        System.out.println("Libro Guardado:");
+        System.out.println("Titulo:");
+        System.out.println(bookAPI.title());
+        System.out.println("Autor(es):");
+        bookAPI.authors().stream()
+                .forEach(System.out::println);
     }
 }
