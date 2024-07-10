@@ -21,10 +21,6 @@ public class ConsoleMenu {
     private ConsumoAPI consumoAPI = ConsumoAPI.getInstance();
     private ConvierteDatos convierteDatos = ConvierteDatos.getInstance();
 
-    private AuthorRepository authorRepository;
-    private BookRepository bookRepository;
-    private LibroAutorRepository libroAutorRepository;
-
     @Autowired
     private AuthorService authorService;
     @Autowired
@@ -47,7 +43,6 @@ public class ConsoleMenu {
                     """;
             System.out.println(menu);
             opcion = leerOpcion();
-            //teclado.nextLine();
 
             switch (opcion) {
                 case 1:
@@ -92,13 +87,6 @@ public class ConsoleMenu {
                 });
         imprimirLibroGuardado(listOfBooksAPI.results().getFirst());
         System.out.println();
-
-        // Se suspende lo de abajo porque ni yo sé qué hice.
-        /*s.getLibroAutor().stream()
-                .forEach(a -> {
-                    libroAutorRepository.save(a);
-                    authorRepositoory.save(a.getAuthorDB());
-                });*/
     }
 
     private int leerOpcion() {
