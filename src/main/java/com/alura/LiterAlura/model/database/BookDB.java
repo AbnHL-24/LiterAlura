@@ -15,7 +15,7 @@ public class BookDB {
     private Integer idGutendex;
     private String title;
     @OneToMany(mappedBy = "bookDB", cascade = CascadeType.ALL)
-    private List<LibroAutor> libroAutor;
+    private List<LibroAutorDB> libroAutorDB;
     /*@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<LibroAutor> libroAutores;*/
 
@@ -24,6 +24,5 @@ public class BookDB {
     public BookDB(BookAPI bookAPI) {
         this.idGutendex = bookAPI.id();
         this.title = bookAPI.title();
-        // TODO agregar lógica del libroAutor.
     }
 }

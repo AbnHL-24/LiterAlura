@@ -18,7 +18,7 @@ public class AuthorDB{
     @Column(unique = true, nullable = false)
     private String name;
     @OneToMany(mappedBy = "authorDB", cascade = CascadeType.ALL)
-    private List<LibroAutor> libroAutores;
+    private List<LibroAutorDB> libroAutoreDBS;
 
     public AuthorDB() {}
 
