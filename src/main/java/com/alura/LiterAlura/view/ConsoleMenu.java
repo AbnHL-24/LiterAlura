@@ -5,23 +5,32 @@ import com.alura.LiterAlura.model.api.ListOfBooksAPI;
 import com.alura.LiterAlura.model.database.AuthorDB;
 import com.alura.LiterAlura.model.database.BookDB;
 import com.alura.LiterAlura.model.database.LibroAutorDB;
-import com.alura.LiterAlura.repository.AuthorRepositoory;
+import com.alura.LiterAlura.repository.AuthorRepository;
 import com.alura.LiterAlura.repository.BookRepository;
 import com.alura.LiterAlura.repository.LibroAutorRepository;
-import com.alura.LiterAlura.service.ConsumoAPI;
-import com.alura.LiterAlura.service.ConvierteDatos;
+import com.alura.LiterAlura.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Locale;
 import java.util.Scanner;
 
+@Component
 public class ConsoleMenu {
     private Scanner teclado = new Scanner(System.in).useLocale(Locale.US);
     private ConsumoAPI consumoAPI = ConsumoAPI.getInstance();
     private ConvierteDatos convierteDatos = ConvierteDatos.getInstance();
 
-    private AuthorRepositoory authorRepositoory;
+    private AuthorRepository authorRepository;
     private BookRepository bookRepository;
     private LibroAutorRepository libroAutorRepository;
+
+    @Autowired
+    private AuthorService authorService;
+    @Autowired
+    private BookService bookService;
+    @Autowired
+    private LibroAutorService libroAutorService;
 
 
     public void muestraElMenu() {
@@ -70,19 +79,20 @@ public class ConsoleMenu {
         ListOfBooksAPI listOfBooksAPI = convierteDatos.obtenerDatos(json, ListOfBooksAPI.class);
         // Se obtiene el primer resultado, se crea y guarda un BookDB con él.
         BookDB bookDB = new BookDB(listOfBooksAPI.results().getFirst());
-        var s = bookRepository.save(bookDB);
+        var s = bookService.saveBook(bookDB);
         // Intentando guardar los LibroAutor y los Autores.
         listOfBooksAPI.results().getFirst().authors().stream()
                 .forEach(a -> {
                     // Creando cada autor y guardándolo,
                     AuthorDB authorDB = new AuthorDB(a);
-                    var aDB = authorRepositoory.save(authorDB);
+                    var aDB = authorService.saveAuthor(authorDB);
                     // Creando cada libroAutor y guardándolo.
-                    LibroAutorDB libroAutorDB = new LibroAutorDB(bookDB, authorDB);
-                    var laDB = libroAutorRepository.save(libroAutorDB);
+                    LibroAutorDB libroAutorDB = new LibroAutorDB(s, aDB);
+                    var laDB = libroAutorService.saveLibroAutor(libroAutorDB);
                 });
         imprimirLibroGuardado(listOfBooksAPI.results().getFirst());
         System.out.println();
+
         // Se suspende lo de abajo porque ni yo sé qué hice.
         /*s.getLibroAutor().stream()
                 .forEach(a -> {
@@ -107,6 +117,6 @@ public class ConsoleMenu {
         System.out.println(bookAPI.title());
         System.out.println("Autor(es):");
         bookAPI.authors().stream()
-                .forEach(System.out::println);
+                .forEach(a -> System.out.println(a.name()));
     }
 }
