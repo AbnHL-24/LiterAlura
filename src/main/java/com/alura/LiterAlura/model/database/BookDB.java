@@ -3,6 +3,7 @@ package com.alura.LiterAlura.model.database;
 import com.alura.LiterAlura.model.api.BookAPI;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -15,7 +16,8 @@ public class BookDB {
     private Integer idGutendex;
     private String title;
     private String language;
-    @OneToMany(mappedBy = "bookDB", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "bookDB", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ToString.Exclude
     private List<LibroAutorDB> libroAutorDB;
     /*@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<LibroAutor> libroAutores;*/

@@ -9,6 +9,8 @@ import com.alura.LiterAlura.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.sql.SQLOutput;
+import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -46,12 +48,16 @@ public class ConsoleMenu {
                     buscarLibrosPorTitulo();
                     break;
                 case 2:
+                    listarLibrosRegistrados();
                     break;
                 case 3:
+                    listarAutoresRegistrados();
                     break;
                 case 4:
+                    autoresVivosEnDeterminadoányo();
                     break;
                 case 5:
+                    librosPorIdioma();
                     break;
                 case 0:
                     System.out.println("Cerrando la aplicación...");
@@ -60,6 +66,42 @@ public class ConsoleMenu {
                     System.out.println("Opción inválida");
             }
         }
+    }
+
+    private void librosPorIdioma() {
+        System.out.println("ingrese las iniciales de los idiomas:");
+        System.out.println("es - español\nen - ingles\nfr - frances\npt - portugues");
+        String idioma = teclado.next();
+        List<BookDB> librosEnDeterminadoIdioma = bookService.listarLibrosPorIdioma(idioma);
+        System.out.println("Libros en el idioma: " + librosEnDeterminadoIdioma);
+        librosEnDeterminadoIdioma.stream()
+                .forEach(b -> System.out.println(b.getTitle()));
+    }
+
+    private void autoresVivosEnDeterminadoányo() {
+        System.out.println("Ingrese el nombre del autor que desea buscar: ");
+        String autorIngresado = teclado.nextLine();
+        List<AuthorDB> autoresVivosXAnyo = authorService.listarAutoresVivosEnAno(Integer.parseInt(autorIngresado));
+        System.out.println("Autores vivos en el año: " + autoresVivosXAnyo + ".");
+        autoresVivosXAnyo.stream()
+                .forEach(a -> System.out.println(a.getName()));
+        System.out.println();
+    }
+
+    private void listarAutoresRegistrados() {
+        List<AuthorDB> autoresRegistrados = authorService.listarAutoresRegistrados();
+        autoresRegistrados.stream()
+                .forEach(a -> {
+                    System.out.println("Autor guardado: ");
+                    System.out.println(a.getName());
+                    System.out.println();
+                });
+    }
+
+    private void listarLibrosRegistrados() {
+        List<BookDB> librosRegistrados = bookService.listarLibrosRegistrados();
+        librosRegistrados.stream()
+                .forEach(l -> imprimirLibroGuardadoDB(l));
     }
 
     private void buscarLibrosPorTitulo() {
@@ -82,7 +124,7 @@ public class ConsoleMenu {
                     LibroAutorDB libroAutorDB = new LibroAutorDB(s, aDB);
                     var laDB = libroAutorService.saveLibroAutor(libroAutorDB);
                 });
-        imprimirLibroGuardado(listOfBooksAPI.results().getFirst());
+        imprimirLibroGuardadoAPI(listOfBooksAPI.results().getFirst());
         System.out.println();
     }
 
@@ -96,12 +138,19 @@ public class ConsoleMenu {
         }
     }
 
-    private void imprimirLibroGuardado(BookAPI bookAPI) {
+    private void imprimirLibroGuardadoAPI(BookAPI bookAPI) {
         System.out.println("Libro Guardado:");
         System.out.println("Titulo:");
         System.out.println(bookAPI.title());
         System.out.println("Autor(es):");
         bookAPI.authors().stream()
                 .forEach(a -> System.out.println(a.name()));
+    }
+
+    private void imprimirLibroGuardadoDB(BookDB bookDB) {
+        System.out.println("Libro Guardado:");
+        System.out.println("Titulo:");
+        System.out.println(bookDB.getTitle());
+        System.out.println();
     }
 }
