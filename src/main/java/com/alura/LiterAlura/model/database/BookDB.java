@@ -14,6 +14,7 @@ public class BookDB {
     private long id;
     private Integer idGutendex;
     private String title;
+    private String language;
     @OneToMany(mappedBy = "bookDB", cascade = CascadeType.ALL)
     private List<LibroAutorDB> libroAutorDB;
     /*@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -24,5 +25,6 @@ public class BookDB {
     public BookDB(BookAPI bookAPI) {
         this.idGutendex = bookAPI.id();
         this.title = bookAPI.title();
+        this.language = bookAPI.languages().getFirst();
     }
 }

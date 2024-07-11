@@ -5,6 +5,8 @@ import com.alura.LiterAlura.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class BookService {
     @Autowired
@@ -12,5 +14,13 @@ public class BookService {
 
     public BookDB saveBook(BookDB bookDB) {
         return bookRepository.save(bookDB);
+    }
+
+    public List<BookDB> listarLibrosRegistrados() {
+        return bookRepository.findAll();
+    }
+
+    public List<BookDB> listarLibrosPorIdioma(String idioma) {
+        return bookRepository.findByLanguage(idioma);
     }
 }

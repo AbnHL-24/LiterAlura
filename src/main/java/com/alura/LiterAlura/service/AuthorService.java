@@ -5,6 +5,8 @@ import com.alura.LiterAlura.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AuthorService {
     @Autowired
@@ -12,5 +14,13 @@ public class AuthorService {
 
     public AuthorDB saveAuthor(AuthorDB author) {
         return authorRepository.save(author);
+    }
+
+    public List<AuthorDB> listarAutoresRegistrados() {
+        return authorRepository.findAll();
+    }
+
+    public List<AuthorDB> listarAutoresVivosEnAno(Integer year) {
+        return authorRepository.findByDeathYearGreaterThanEqualOrDeathYearIsNull(year);
     }
 }

@@ -26,6 +26,5 @@ public class AuthorDB{
         this.birthYear = personAPI.birthYear();
         this.deathYear = personAPI.deathYear();
         this.name = personAPI.name();
-        // TODO agregar lógica del libroAutor.
     }
 }
